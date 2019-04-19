@@ -15,14 +15,14 @@ replace:
   scoreboardScore: false
   scoreboardTeam: false
   tabComplete:
-    chat: false
+    chat: true
 
 updateSelf: true
 
 random:
   join:
-    nick: false
-    skin: false
+    nick: true
+    skin: true
   nick:
   - "inventivetalent"
   - "md_5"
@@ -42,10 +42,10 @@ names:
   chatFormat: "%s&r"
 
   # Allow names with spaces. This replaces underscores ("_") in names with a space - Double underscores ("__") are displayed as single underscores.
-  spaces: false
+  spaces: true
 
 #Enable this if this server is behind a BungeeCord server
-bungeecord: false
+bungeecord: true
 
 storage:
   # Storage type
