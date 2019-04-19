@@ -104,7 +104,7 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 
 	final Executor storageExecutor = Executors.newSingleThreadExecutor();
 
-	//	@ConfigValue(path = "replace.tab") boolean replaceTab;
+		@ConfigValue(path = "replace.tab") boolean replaceTab;
 	@ConfigValue(path = "replace.chat.player")      boolean replaceChatPlayer;
 	@ConfigValue(path = "replace.chat.out")         boolean replaceChatOut;
 	@ConfigValue(path = "replace.chat.in.general")  boolean replaceChatInGeneral;
@@ -116,9 +116,9 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 
 	@ConfigValue(path = "updateSelf") boolean updateSelf = true;
 
-	//	@ConfigValue(path = "random.nick")
+		@ConfigValue(path = "random.nick")
 	public                                         Map<String, Collection<String>> randomNicks    = new HashMap<>();
-	//	@ConfigValue(path = "random.skin")
+		@ConfigValue(path = "random.skin")
 	public                                         Map<String, Collection<String>> randomSkins    = new HashMap<>();
 	@ConfigValue(path = "random.join.nick") public boolean                         randomJoinNick = false;
 	@ConfigValue(path = "random.join.skin") public boolean                         randomJoinSkin = false;
@@ -134,8 +134,8 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 	@ConfigValue(path = "storage.type") String storageType = "temporary";
 
 	@ConfigValue(path = "storage.sql.address") String sqlAddress;
-	//	@ConfigValue(path = "storage.sql.host") String sqlHost;
-	//	@ConfigValue(path = "storage.sql.port") int    sqlPort;
+		@ConfigValue(path = "storage.sql.host") String sqlHost;
+		@ConfigValue(path = "storage.sql.port") int    sqlPort;
 	@ConfigValue(path = "storage.sql.user")    String sqlUser;
 	@ConfigValue(path = "storage.sql.pass")    String sqlPass;
 
@@ -215,9 +215,9 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 				break;
 			case "redis":
 				throw new RuntimeException("Redis storage is currently not supported.");
-				//				getLogger().info("Using Redis storage (" + redisHost + ":" + redisPort + ")");
-				//				initStorageRedis();
-				//				break;
+								getLogger().info("Using Redis storage (" + redisHost + ":" + redisPort + ")");
+								initStorageRedis();
+								break;
 		}
 
 		new Metrics(this);
@@ -255,7 +255,7 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 				.expireAfterWrite(10, TimeUnit.MINUTES), storageExecutor);
 	}
 
-	/*void initStorageLocal() {
+	void initStorageLocal() {
 		int nickCount = -1;
 		int skinCount = -1;
 		int dataCount = -1;
@@ -278,7 +278,7 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 								return new NickEntry(key, value);
 							}
 						})));
-		//		((PluginNickManager) NickNamerAPI.getNickManager()).setNickDataProvider(wrapAsyncProvider(String.class, new EbeanDataProvider<>(String.class, getDatabase(), NickEntry.class)));
+				((PluginNickManager) NickNamerAPI.getNickManager()).setNickDataProvider(wrapAsyncProvider(String.class, new EbeanDataProvider<>(String.class, getDatabase(), NickEntry.class)));
 		if (dataCount > 0) {
 			getLogger().info("Found " + skinCount + " player skin-data in database");
 		}
@@ -290,7 +290,7 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 								return new SkinEntry(key, value);
 							}
 						})));
-		//		((PluginNickManager) NickNamerAPI.getNickManager()).setSkinDataProvider(wrapAsyncProvider(String.class, new EbeanDataProvider<>(String.class, getDatabase(), SkinEntry.class)));
+				((PluginNickManager) NickNamerAPI.getNickManager()).setSkinDataProvider(wrapAsyncProvider(String.class, new EbeanDataProvider<>(String.class, getDatabase(), SkinEntry.class)));
 
 		if (dataCount > 0) {
 			getLogger().info("Found " + dataCount + " skin textures in database");
@@ -311,15 +311,15 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 						return bean;
 					}
 				})));
-		//		SkinLoader.setSkinDataProvider(new EbeanDataProvider<Object>(Object.class/*We're using a custom parser/serializer, so this class doesn't matter, getDatabase(), SkinDataEntry.class) {
-		//			@Override
-		//			public KeyValueBean newBean() {
-		//				SkinDataEntry bean = new SkinDataEntry();
-		//				bean.setLoadTime(System.currentTimeMillis());
-		//				return bean;
-		//			}
-		//		});
-	}*/
+				SkinLoader.setSkinDataProvider(new EbeanDataProvider<Object>(Object.class //We're using a custom parser/serializer, so this class doesn't matter, getDatabase(), SkinDataEntry.class) {
+					@Override
+					public KeyValueBean newBean() {
+						SkinDataEntry bean = new SkinDataEntry();
+						bean.setLoadTime(System.currentTimeMillis());
+						return bean;
+					}
+				});
+	}
 
 	void initStorageLocal() {
 		File dbFile = new File(getDataFolder(), "nicknamer.db");
@@ -379,11 +379,11 @@ public class NickNamerPlugin extends JavaPlugin implements Listener, PluginMessa
 					((PluginNickManager) NickNamerAPI.getNickManager())
 							.setNickDataProvider(initCache(AsyncStringValueMapper
 									.redis(new RedisDataProvider(jedis, "nn_data:%s:nick", "nn_data:(.*):nick"))));
-					//					((PluginNickManager) NickNamerAPI.getNickManager()).setNickDataProvider(wrapAsyncProvider(String.class, new RedisDataProvider<>(String.class, pool, "nn_data:%s:nick", "nn_data:(.*):nick")));
+										((PluginNickManager) NickNamerAPI.getNickManager()).setNickDataProvider(wrapAsyncProvider(String.class, new RedisDataProvider<>(String.class, pool, "nn_data:%s:nick", "nn_data:(.*):nick")));
 					((PluginNickManager) NickNamerAPI.getNickManager())
 							.setSkinDataProvider(initCache(AsyncStringValueMapper
 									.redis(new RedisDataProvider(jedis, "nn_data:%s:skin", "nn_data:(.*):skin"))));
-					//					((PluginNickManager) NickNamerAPI.getNickManager()).setSkinDataProvider(wrapAsyncProvider(String.class, new RedisDataProvider<>(String.class, pool, "nn_data:%s:skin", "nn_data:(.*):skin")));
+										((PluginNickManager) NickNamerAPI.getNickManager()).setSkinDataProvider(wrapAsyncProvider(String.class, new RedisDataProvider<>(String.class, pool, "nn_data:%s:skin", "nn_data:(.*):skin")));
 					SkinLoader.setSkinDataProvider(initCache(AsyncJsonValueMapper
 							.redis(new RedisDataProvider(jedis, "nn_skins:%s", "nn_skins:(.ü)") {
 								@Override
